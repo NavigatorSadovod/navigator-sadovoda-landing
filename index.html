@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Навигатор садовода — умное планирование дачного участка</title>
+  <meta name="description" content="Автономное приложение для садоводов: планирование участка, расчёт теней, севооборот, умный календарь. Работает без интернета.">
+  <meta property="og:title" content="Навигатор садовода">
+  <meta property="og:description" content="Умное планирование дачного участка с расчётом теней и севооборотом">
+  <meta property="og:image" content="https://yourusername.github.io/navigator-sadovoda/icon.png">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/png" href="icon.png">
+  <style>
+    :root {
+      --navy: #1a2f4a;
+      --navy-light: #2a4a6f;
+      --green: #2d8a2d;
+      --green-light: #4caf50;
+      --mint: #d4f5d4;
+      --cream: #f8faf8;
+      --text: #1a2f4a;
+      --muted: #5a6f7a;
+      --card: #ffffff;
+      --radius: 20px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif; color: var(--text); line-height: 1.6; background: var(--cream); }
+    a { color: inherit; text-decoration: none; }
+    .container { max-width: 960px; margin: 0 auto; padding: 24px; }
+
+    /* Hero */
+    .hero { text-align: center; padding: 56px 24px 64px; background: linear-gradient(160deg, var(--navy) 0%, var(--navy-light) 50%, var(--green) 100%); color: white; border-radius: var(--radius); margin-bottom: 40px; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; top: -50%; right: -20%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%); pointer-events: none; }
+    .hero-icon { width: 120px; height: 120px; border-radius: 28px; margin-bottom: 20px; box-shadow: 0 12px 40px rgba(0,0,0,0.25); animation: float 4s ease-in-out infinite; position: relative; z-index: 1; }
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    .hero h1 { font-size: 2.4rem; margin-bottom: 12px; font-weight: 800; letter-spacing: -0.5px; position: relative; z-index: 1; }
+    .hero p { font-size: 1.15rem; max-width: 560px; margin: 0 auto 28px; opacity: 0.92; position: relative; z-index: 1; }
+    .badge { display: inline-block; background: rgba(255,255,255,0.15); backdrop-filter: blur(4px); padding: 6px 16px; border-radius: 99px; font-size: 0.85rem; font-weight: 600; margin-bottom: 16px; position: relative; z-index: 1; border: 1px solid rgba(255,255,255,0.2); }
+    .btn { display: inline-block; background: white; color: var(--navy); padding: 14px 36px; border-radius: 99px; font-weight: 700; box-shadow: 0 4px 20px rgba(0,0,0,0.2); border: none; cursor: pointer; font-size: 1rem; transition: all 0.2s; position: relative; z-index: 1; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(0,0,0,0.25); }
+
+    /* Sections */
+    .section-title { font-size: 1.6rem; font-weight: 700; margin: 48px 0 24px; text-align: center; color: var(--navy); }
+
+    /* Features */
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 48px; }
+    .feature { background: var(--card); padding: 28px; border-radius: var(--radius); box-shadow: 0 2px 12px rgba(26,47,74,0.06); border: 1px solid rgba(26,47,74,0.04); transition: transform 0.2s; }
+    .feature:hover { transform: translateY(-4px); }
+    .feature-icon { font-size: 2rem; margin-bottom: 12px; }
+    .feature h3 { font-size: 1.1rem; margin-bottom: 8px; color: var(--navy); }
+    .feature p { font-size: 0.95rem; color: var(--muted); }
+
+    /* Pricing toggle */
+    .toggle { display: flex; justify-content: center; gap: 8px; margin-bottom: 28px; background: var(--mint); padding: 6px; border-radius: 99px; width: fit-content; margin-left: auto; margin-right: auto; }
+    .toggle button { border: none; background: transparent; padding: 10px 22px; border-radius: 99px; font-weight: 600; cursor: pointer; color: var(--navy); font-size: 0.95rem; transition: all 0.2s; }
+    .toggle button.active { background: white; color: var(--navy); box-shadow: 0 2px 8px rgba(26,47,74,0.1); }
+
+    /* Pricing cards */
+    .pricing { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 48px; }
+    .card { background: var(--card); border-radius: var(--radius); padding: 32px; box-shadow: 0 2px 12px rgba(26,47,74,0.06); display: flex; flex-direction: column; position: relative; overflow: hidden; border: 1px solid rgba(26,47,74,0.04); }
+    .card.popular { border: 2px solid var(--green); box-shadow: 0 4px 20px rgba(45,138,45,0.1); }
+    .popular-badge { position: absolute; top: 14px; right: -30px; background: var(--green); color: white; padding: 4px 36px; font-size: 0.75rem; font-weight: 700; transform: rotate(35deg); }
+    .card h3 { font-size: 1.3rem; margin-bottom: 4px; color: var(--navy); }
+    .subtitle { font-size: 0.9rem; color: var(--muted); margin-bottom: 16px; }
+    .price { font-size: 2.4rem; font-weight: 800; color: var(--green); margin: 8px 0; }
+    .price .period { font-size: 0.95rem; font-weight: 500; color: var(--muted); }
+    .card ul { list-style: none; margin: 20px 0 28px; flex-grow: 1; }
+    .card li { padding: 6px 0; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
+    .card li::before { content: "✓"; color: var(--green); font-weight: 700; }
+    .cta { display: block; text-align: center; background: var(--mint); color: var(--navy); padding: 14px; border-radius: 12px; font-weight: 700; transition: all 0.2s; border: none; cursor: pointer; font-size: 1rem; }
+    .card.popular .cta { background: var(--green); color: white; }
+    .cta:hover { opacity: 0.9; transform: translateY(-1px); }
+    .cta:disabled { opacity: 0.6; cursor: wait; }
+
+    /* Footer & docs */
+    .footer { text-align: center; padding: 40px 24px; background: white; border-radius: var(--radius); box-shadow: 0 2px 12px rgba(26,47,74,0.06); margin-bottom: 24px; }
+    .footer h4 { margin-bottom: 12px; color: var(--navy); }
+    .footer p { margin: 4px 0; color: var(--muted); font-size: 0.95rem; }
+    .footer a { color: var(--green); font-weight: 600; }
+    .docs { display: flex; justify-content: center; gap: 20px; margin-top: 16px; flex-wrap: wrap; }
+    .docs a { font-size: 0.9rem; color: var(--muted); text-decoration: underline; text-underline-offset: 3px; }
+
+    /* Legal sections */
+    .legal { background: white; padding: 32px; border-radius: var(--radius); margin-bottom: 24px; box-shadow: 0 2px 12px rgba(26,47,74,0.06); }
+    .legal h2 { font-size: 1.2rem; color: var(--navy); margin-bottom: 16px; }
+    .legal p, .legal li { font-size: 0.9rem; color: var(--muted); margin-bottom: 8px; line-height: 1.7; }
+    .legal ol { padding-left: 20px; }
+    .anchor { display: block; position: relative; top: -80px; visibility: hidden; }
+
+    /* Toast */
+    .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--navy); color: white; padding: 14px 28px; border-radius: 12px; font-weight: 600; opacity: 0; transition: all 0.3s; z-index: 100; box-shadow: 0 4px 16px rgba(0,0,0,0.2); }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.8rem; }
+      .hero-icon { width: 90px; height: 90px; }
+      .price { font-size: 2rem; }
+      .pricing { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Hero -->
+  <div class="hero">
+    <div class="badge">🌿 Автономное приложение для дачников</div>
+    <img src="icon.png" alt="Навигатор садовода" class="hero-icon">
+    <h1>Навигатор садовода</h1>
+    <p>Умное планирование участка, расчёт теней, севооборот и персональный календарь ухода — всё работает без интернета.</p>
+    <a class="btn" href="#pricing">Выбрать тариф</a>
+  </div>
+
+  <!-- Features -->
+  <h2 class="section-title">Возможности</h2>
+  <div class="features">
+    <div class="feature">
+      <div class="feature-icon">☀️</div>
+      <h3>Тепловая карта солнца</h3>
+      <p>Точный расчёт освещённости и теней от построек для каждого часа дня.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📅</div>
+      <h3>Умный календарь</h3>
+      <p>Автоматические задачи по поливу, подкормке и сбору урожая с учётом погоды.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔄</div>
+      <h3>Севооборот</h3>
+      <p>Алгоритм предупреждает, если вы сажаете культуру на «родственное» место.</p>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📦</div>
+      <h3>Склад и дневник</h3>
+      <p>Учёт семян и инвентаря. Автоматический списание при посадке.</p>
+    </div>
+  </div>
+
+  <!-- Pricing -->
+  <h2 class="section-title" id="pricing">Тарифы</h2>
+  <div class="toggle">
+    <button onclick="setPeriod('month')" id="btn-month">Месяц</button>
+    <button onclick="setPeriod('season')" id="btn-season" class="active">Сезон</button>
+    <button onclick="setPeriod('year')" id="btn-year">Год</button>
+  </div>
+
+  <div class="pricing">
+    <div class="card">
+      <h3>Стандарт</h3>
+      <div class="subtitle">Для небольшого участка</div>
+      <div class="price" data-month="99 ₽" data-season="259 ₽" data-year="799 ₽">259 ₽<span class="period">/сезон</span></div>
+      <ul>
+        <li>1 участок</li>
+        <li>До 5 грядок</li>
+        <li>Базовый календарь</li>
+        <li>Ручной учёт</li>
+        <li>Офлайн-режим</li>
+      </ul>
+      <button class="cta" onclick="pay('standard')">Оформить</button>
+    </div>
+
+    <div class="card popular">
+      <div class="popular-badge">ПОПУЛЯРНЫЙ</div>
+      <h3>Премиум</h3>
+      <div class="subtitle">Оптимальный выбор</div>
+      <div class="price" data-month="199 ₽" data-season="599 ₽" data-year="1 849 ₽">599 ₽<span class="period">/сезон</span></div>
+      <ul>
+        <li>3 участка</li>
+        <li>Неограниченные грядки</li>
+        <li>Умный прогноз погоды</li>
+        <li>Тепловая карта солнца</li>
+        <li>Автоматический севооборот</li>
+        <li>Приоритетная поддержка</li>
+      </ul>
+      <button class="cta" onclick="pay('premium')">Оформить</button>
+    </div>
+
+    <div class="card">
+      <h3>Ультра</h3>
+      <div class="subtitle">Для профессионалов</div>
+      <div class="price" data-month="299 ₽" data-season="749 ₽" data-year="2 399 ₽">749 ₽<span class="period">/сезон</span></div>
+      <ul>
+        <li>Неограниченные участки</li>
+        <li>Все функции Премиум</li>
+        <li>Экспорт данных (CSV/PDF)</li>
+        <li>Расширенная аналитика урожая</li>
+        <li>Персональные консультации</li>
+      </ul>
+      <button class="cta" onclick="pay('ultra')">Оформить</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <h4>Контакты</h4>
+    <p>E-mail: <a href="mailto:support@navigator-sadovoda.ru">support@navigator-sadovoda.ru</a></p>
+    <p>ИНН: <strong>ВАШ_ИНН</strong> | Самозанятый</p>
+    <div class="docs">
+      <a href="#offer">Публичная оферта</a>
+      <a href="#privacy">Политика конфиденциальности</a>
+      <a href="#refund">Возврат средств</a>
+    </div>
+    <p style="margin-top:16px; font-size:0.85rem; color:#adb5bd;">© 2026 Навигатор садовода. Все права защищены.</p>
+  </div>
+
+  <!-- Legal: Public Offer -->
+  <span class="anchor" id="offer"></span>
+  <div class="legal">
+    <h2>Публичная оферта</h2>
+    <p><strong>1. Общие положения.</strong> Настоящая оферта является публичным предложением Исполнителя (самозанятый, ИНН: 525404993014) любому дееспособному физическому лицу (Заказчику) заключить договор оказания информационных услуг на условиях, изложенных ниже.</p>
+    <p><strong>2. Предмет договора.</strong> Исполнитель предоставляет Заказчику доступ к функционалу мобильного приложения «Навигатор садовода» в соответствии с выбранным тарифом (Стандарт, Премиум, Ультра) и периодом подписки (месяц, сезон, год).</p>
+    <p><strong>3. Цена и порядок оплаты.</strong> Стоимость услуг указана на сайте. Оплата производится через платёжный агент ООО «ЮKassa» (НКО «ЮMoney»). Доступ активируется в течение 24 часов после подтверждения оплаты.</p>
+    <p><strong>4. Права и обязанности сторон.</strong> Исполнитель обязуется поддерживать работоспособность приложения в рамках выбранного тарифа. Заказчик обязуется не передавать доступ третьим лицам.</p>
+    <p><strong>5. Возврат средств.</strong> Возврат возможен в течение 14 дней с момента оплаты при условии, что доступ к функциям не был использован. Для оформления возврата напишите на bazhenavo@yandex.ru.</p>
+    <p><strong>6. Заключительные положения.</strong> Оферта вступает в силу с момента акцепта (оплаты). Исполнитель вправе изменять условия оферты в одностороннем порядке с уведомлением на сайте.</p>
+  </div>
+
+  <!-- Legal: Privacy Policy -->
+  <span class="anchor" id="privacy"></span>
+  <div class="legal">
+    <h2>Политика конфиденциальности</h2>
+    <p><strong>1. Общие положения.</strong> Настоящая Политика регулирует порядок обработки персональных данных пользователей мобильного приложения «Навигатор садовода».</p>
+    <p><strong>2. Состав персональных данных.</strong> Мы можем обрабатывать: адрес электронной почты, геолокацию участка (только локально, на устройстве), данные о посадках и урожае (хранятся в зашифрованном виде на серверах Supabase).</p>
+    <p><strong>3. Цели обработки.</strong> Данные используются исключительно для предоставления функционала приложения: построение плана участка, расчёт освещённости, формирование календаря ухода.</p>
+    <p><strong>4. Передача третьим лицам.</strong> Данные не передаются третьим лицам, за исключением случаев, предусмотренных законодательством РФ, а также при передаче платёжному агенту (ООО «ЮKassa») для обработки транзакций.</p>
+    <p><strong>5. Права пользователя.</strong> Пользователь вправе запросить удаление своих данных, направив запрос на bazhenavo@yandex.ru.</p>
+  </div>
+
+  <!-- Legal: Refund -->
+  <span class="anchor" id="refund"></span>
+  <div class="legal">
+    <h2>Возврат средств</h2>
+    <p>1. Возврат денежных средств за подписку осуществляется в течение 14 календарных дней с момента оплаты.</p>
+    <p>2. Условие возврата: доступ к платным функциям не был использован (нет записей в журнале активности).</p>
+    <p>3. Для оформления возврата отправьте письмо на <a href="mailto:bazhenavo@yandex.ru">bazhenavo@yandex.ru</a> с указанием даты оплаты, суммы и номера заказа (payment_id).</p>
+    <p>4. Срок рассмотрения заявки — до 10 рабочих дней. Деньги возвращаются тем же способом, которым была произведена оплата.</p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  const PRICES = {
+    standard: { month: 99, season: 259, year: 799 },
+    premium:  { month: 199, season: 599, year: 1849 },
+    ultra:    { month: 299, season: 749, year: 2399 }
+  };
+  const DESCS = {
+    standard: 'Подписка Стандарт',
+    premium:  'Подписка Премиум',
+    ultra:    'Подписка Ультра'
+  };
+  let currentPeriod = 'season';
+
+  function setPeriod(p) {
+    currentPeriod = p;
+    document.querySelectorAll('.toggle button').forEach(b => b.classList.remove('active'));
+    document.getElementById('btn-'+p).classList.add('active');
+    const map = {month:'/мес', season:'/сезон', year:'/год'};
+    document.querySelectorAll('.price').forEach(el => {
+      el.innerHTML = el.getAttribute('data-'+p) + '<span class="period">'+map[p]+'</span>';
+    });
+  }
+
+  async function pay(tariff) {
+    const btn = event.target;
+    btn.disabled = true;
+    btn.textContent = 'Переходим к оплате...';
+
+    const amount = PRICES[tariff][currentPeriod];
+    const desc = DESCS[tariff] + ' (' + (currentPeriod==='month'?'месяц':currentPeriod==='season'?'сезон':'год') + ')';
+
+    try {
+      const res = await fetch('https://xapiwzcrkpiwqtyfmbzx.supabase.co/functions/v1/yookassa-create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount, description: desc, tariff, period: currentPeriod })
+      });
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+      } else {
+        showToast('Ошибка: ' + (data.error || 'Не удалось создать платёж'));
+        btn.disabled = false;
+        btn.textContent = 'Оформить';
+      }
+    } catch (e) {
+      showToast('Ошибка соединения. Попробуйте позже.');
+      btn.disabled = false;
+      btn.textContent = 'Оформить';
+    }
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+</script>
+
+</body>
+</html>
