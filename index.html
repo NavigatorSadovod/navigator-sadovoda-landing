@@ -152,14 +152,16 @@ html_code = '''<!DOCTYPE html>
   <div class="pricing">
     <div class="card">
       <h3>Стандарт</h3>
-      <div class="subtitle">Для небольшого участка</div>
-      <div class="price" data-month="99 ₽" data-season="259 ₽" data-year="799 ₽">259 ₽<span class="period">/сезон</span></div>
+      <div class="subtitle">Для активного дачника</div>
+      <div class="price" data-month="99 ₽" data-season="159 ₽" data-year="849 ₽">159 ₽<span class="period">/сезон</span></div>
       <ul>
-        <li>1 участок</li>
-        <li>До 5 грядок</li>
-        <li>Базовый календарь</li>
-        <li>Ручной учёт</li>
-        <li>Офлайн-режим</li>
+        <li>Участок до 15 соток</li>
+        <li>До 30 объектов на карте</li>
+        <li>Тепловая карта — знаем, где светло</li>
+        <li>Прогноз дождя — не поливаем зря</li>
+        <li>Склад до 100 объектов</li>
+        <li>Предупреждения о севообороте</li>
+        <li>Дневник урожая (1 фото на запись)</li>
       </ul>
       <button class="cta" onclick="pay('standard')">Оформить</button>
     </div>
@@ -167,31 +169,34 @@ html_code = '''<!DOCTYPE html>
     <div class="card popular">
       <div class="popular-badge">ПОПУЛЯРНЫЙ</div>
       <h3>Премиум</h3>
-      <div class="subtitle">Оптимальный выбор</div>
-      <div class="price" data-month="199 ₽" data-season="599 ₽" data-year="1 849 ₽">599 ₽<span class="period">/сезон</span></div>
+      <div class="subtitle">Для тех, кто живёт своей дачей</div>
+      <div class="price" data-month="199 ₽" data-season="339 ₽" data-year="1 749 ₽">339 ₽<span class="period">/сезон</span></div>
       <ul>
-        <li>3 участка</li>
+        <li>2 участка по 20 соток</li>
         <li>Неограниченные грядки</li>
         <li>Умный прогноз погоды</li>
-        <li>Тепловая карта солнца</li>
-        <li>Автоматический севооборот</li>
-        <li>Приоритетная поддержка</li>
+        <li>Сверхточный расчёт теней (шаг 0,1 м)</li>
+        <li>Режим «Эксперт» с дополнительными настройками</li>
+        <li>Дневник урожая (2 фото на запись)</li>
+        <li>Ранний доступ к новым функциям</li>
       </ul>
       <button class="cta" onclick="pay('premium')">Оформить</button>
     </div>
 
     <div class="card">
       <h3>Ультра</h3>
-      <div class="subtitle">Для профессионалов</div>
-      <div class="price" data-month="299 ₽" data-season="749 ₽" data-year="2 399 ₽">749 ₽<span class="period">/сезон</span></div>
+      <div class="subtitle">Для максимального результата</div>
+      <div class="price" data-month="349 ₽" data-season="599 ₽" data-year="2 999 ₽">599 ₽<span class="period">/сезон</span></div>
       <ul>
-        <li>Неограниченные участки</li>
-        <li>Все функции Премиум</li>
-        <li>Экспорт данных (CSV/PDF)</li>
+        <li>3 участка по 20 соток</li>
+        <li>Учёт уклона участка</li>
+        <li>Добавление своих культур</li>
         <li>Расширенная аналитика урожая</li>
-        <li>Персональные консультации</li>
+        <li>Сервис подбора культур по анализу почвы</li>
+        <li>Экономика сезона — считаем затраты</li>
+        <li>Экспорт данных в PDF</li>
       </ul>
-      <button class="cta" onclick="pay('ultra')">Оформить</button>
+      <button class="cta" disabled style="background: #e9ecef; color: #6c757d; cursor: not-allowed;">В разработке (Скоро)</button>
     </div>
   </div>
 
